@@ -1,32 +1,43 @@
-# brittany README
+# brittany VSCode extension
 
-This is the README for your extension "brittany". After writing up a brief description, we recommend including the following sections.
+This extension calls the [`brittany`](https://github.com/lspitzner/brittany) program to format Haskell source code. It's implemented with the [VSCode formatting API](https://code.visualstudio.com/blogs/2016/11/15/formatters-best-practices), and supports both full-document and specific ranges.
 
-## Features
+Because it's based on VSCode's formatting API, you use it via VSCode's standard formatting commands:
 
-Describe specific features of your extension including screenshots of your extension in action. Image paths are relative to this README file.
-
-For example if there is an image subfolder under your extension project workspace:
-
-\!\[feature X\]\(images/feature-x.png\)
-
-> Tip: Many popular extensions utilize animations. This is an excellent way to show off your extension! We recommend short, focused animations that are easy to follow.
+* To format a full-page document, open the command palette and choose "Format Document".
+* To format a selection, select some text, open the command palette, and choose "Format Selection".
+* To format on save, open User Preferences (⌘ , or Ctrl ,), then add: `"editor.formatOnSave": true` 
 
 ## Requirements
 
 The `brittany` formatter must be installed as a command line program.
 
+To work with the formatting API, VSCode must recognize your source code file as a `haskell` file. Add this to your User Preferences (⌘ , or Ctrl ,) to set this up:
+
+```
+"files.associations": {
+    "*.hs": "haskell",
+}
+```
+
+I'm not familiar with `brittany`'s support for literate Haskell (.lhs) or Haskell C interface code (.hsc), so I don't know if it would work for those.
+
 ## Extension Settings
 
-Include if your extension adds any VS Code settings through the `contributes.configuration` extension point.
+* `brittany.path`: Path to the brittany executable. This will be wrapped in double quotes to escape it, so your path can e.g. include spaces. Default: `brittany` (so if `brittany` is on your $PATH, it should work without any configuration).
+* `brittany.enable`: A boolean value to enable or disable the extension. Default: `true`.
+* `brittany.additional-flags`: Additional flags to pass to brittany, e.g. --indent AMOUNT. These are unescaped. They should not attempt to change the input or output files. This option mostly exists as an escape hatch—you should generally prefer editing your brittany config file if possible.
 
-For example:
+## brittany Configuration
 
-This extension contributes the following settings:
+`brittany` itself can be configured globally at `~/.config/brittany/config.yaml`, as well as `brittany.yaml` in the directory `brittany` is called from. For standalone files, `brittany` is called from the same directory as the file being formatted. If your file is part of a workspace, `brittany` will be called from the root directory of that workspace. 
 
-* `myExtension.enable`: enable/disable this extension
-* `myExtension.thing`: set to `blah` to do something
+## Caveats
 
-## Known Issues
+* While `brittany` can sometimes format partial selections of code, this functionality is limited based on what it can parse. For example, in this code:
+    ```
+    where fib n = fib (n-3)
+    ```
+    The selection `fib n = fib (n-3)` can be formatted by `brittany`, but the whole line `where fib n = fib (n-3)` cannot be.
 
-* None at this time.
+* This is my first VSCode extension, and I'm not an experienced Node/Typescript developer. If you spot a bug or can make an improvement, issues and PRs are welcome.

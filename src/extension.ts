@@ -30,9 +30,8 @@ export function activate(context: vscode.ExtensionContext) {
 
             // If we're formatting the whole document
             // Brittany operates on files only, so we need to 
-            // Improvement TODO: Unify the tmpfile/regular file approach into passing the data in by stdin in both scenarios.
-            // Could I maybe make a string into stdin instead of all this tmpfile nonsense?
-
+            // Improvement TODO: Instead of making a tmp file, pass the source code into STDIN.
+            // Could also potentially unify this approach with the full-file approach.
             if (range.isEqual(fullDocumentRange(document))) {
                 return runBrittany(document, range, document.uri.fsPath, null);
             } else {
@@ -65,6 +64,7 @@ function runBrittany(document: vscode.TextDocument, range: vscode.Range, inputFi
         var maybeWorkspaceFolder = vscode.workspace.getWorkspaceFolder(document.uri);
         var dir = maybeWorkspaceFolder !== undefined ? maybeWorkspaceFolder.uri.fsPath : path.dirname(document.uri.fsPath)
         console.log("brittany command is: " + cmd);
+        console.log("brittany folder is: " + dir)
 
         var options = {
             encoding: 'utf8',
@@ -88,7 +88,7 @@ function runBrittany(document: vscode.TextDocument, range: vscode.Range, inputFi
                     console.error(error);
                     console.error(stdout);
                     console.error(stderr);
-                    vscode.window.showErrorMessage("Failed to run brittany: " + error);
+                    vscode.window.showErrorMessage("Failed to run brittany; see the developer tools console for details. " + error);
                     return reject([]);
                 } else {
                     if (tmpobj) { tmpobj.removeCallback(); }

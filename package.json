@@ -15,12 +15,6 @@
     ],
     "main": "./out/extension",
     "contributes": {
-        "commands": [
-            {
-                "command": "extension.sayHello",
-                "title": "Hello World"
-            }
-        ],
         "configuration": {
             "title": "brittany configuration",
             "type": "object",
@@ -28,7 +22,7 @@
                 "brittany.path": {
                     "type": "string",
                     "default": "brittany",
-                    "description": "Path to the brittany executable. This will be wrapped in double quotes to escape it, so your path can e.g. include spaces.."
+                    "description": "Path to the brittany executable. This will be wrapped in double quotes to escape it, so your path can e.g. include spaces."
                 },
                 "brittany.enable": {
                     "type": "boolean",
@@ -50,11 +44,13 @@
         "postinstall": "node ./node_modules/vscode/bin/install",
         "test": "npm run compile && node ./node_modules/vscode/bin/test"
     },
+    "dependencies": {
+        "tmp": "^0.0.33"
+    },
     "devDependencies": {
         "typescript": "^2.6.1",
         "vscode": "^1.1.6",
         "@types/node": "^7.0.43",
-        "@types/mocha": "^2.2.42",
-        "tmp": "^0.0.33"
+        "@types/mocha": "^2.2.42"
     }
 }
