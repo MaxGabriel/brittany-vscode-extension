@@ -1,0 +1,60 @@
+{
+    "name": "brittany",
+    "displayName": "brittany",
+    "description": "Runs the Haskell code formatting tool Brittany",
+    "version": "0.0.1",
+    "publisher": "MaxGabriel",
+    "engines": {
+        "vscode": "^1.19.0"
+    },
+    "categories": [
+        "Formatters"
+    ],
+    "activationEvents": [
+        "*"
+    ],
+    "main": "./out/extension",
+    "contributes": {
+        "commands": [
+            {
+                "command": "extension.sayHello",
+                "title": "Hello World"
+            }
+        ],
+        "configuration": {
+            "title": "brittany configuration",
+            "type": "object",
+            "properties": {
+                "brittany.path": {
+                    "type": "string",
+                    "default": "brittany",
+                    "description": "Path to the brittany executable. This will be wrapped in double quotes to escape it, so your path can e.g. include spaces.."
+                },
+                "brittany.enable": {
+                    "type": "boolean",
+                    "default": true,
+                    "description": "Whether the extension should be enabled."
+                },
+                "brittany.additional-flags": {
+                    "type": "string",
+                    "default": "",
+                    "description": "Additional flags to pass to brittany, e.g. --indent AMOUNT. These are unescaped. They should not attempt to change the input or output files. This option mostly exists as an escape hatch—you should generally prefer editing your brittany config file if possible."
+                }
+            }
+        }
+    },
+    "scripts": {
+        "vscode:prepublish": "npm run compile",
+        "compile": "tsc -p ./",
+        "watch": "tsc -watch -p ./",
+        "postinstall": "node ./node_modules/vscode/bin/install",
+        "test": "npm run compile && node ./node_modules/vscode/bin/test"
+    },
+    "devDependencies": {
+        "typescript": "^2.6.1",
+        "vscode": "^1.1.6",
+        "@types/node": "^7.0.43",
+        "@types/mocha": "^2.2.42",
+        "tmp": "^0.0.33"
+    }
+}
