@@ -8,9 +8,11 @@ Because it's based on VSCode's formatting API, you use it via VSCode's standard 
 * To format a selection, select some text, open the command palette, and choose "Format Selection".
 * To format on save, open User Preferences (⌘ , or Ctrl ,), then add: `"editor.formatOnSave": true` 
 
+Source code for this extension is available [on Github](https://github.com/MaxGabriel/brittany-vscode-extension).
+
 ## Requirements
 
-The `brittany` formatter must be installed as a command line program.
+The `brittany` formatter must be installed as a command line program. See the [`brittany` README](https://github.com/lspitzner/brittany#installation) for details.
 
 To work with the formatting API, VSCode must recognize your source code file as a `haskell` file. Add this to your User Preferences (⌘ , or Ctrl ,) to set this up:
 
