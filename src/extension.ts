@@ -30,16 +30,23 @@ export function activate(context: vscode.ExtensionContext) {
 
             // If we're formatting the whole document
             // Brittany operates on files only, so we need to 
+            // Improvement TODO: Unify the tmpfile/regular file approach into passing the data in by stdin in both scenarios.
             // Could I maybe make a string into stdin instead of all this tmpfile nonsense?
-            
+
             if (range.isEqual(fullDocumentRange(document))) {
                 return runBrittany(document, range, document.uri.fsPath, null);
             } else {
                 let substring = document.getText(range);
                 let tmpobj = tmp.fileSync();
                 console.log('brittany: Temporary file: ', tmpobj.name);
-                fs.write(tmpobj.fd, substring, (err: NodeJS.ErrnoException, written: number, str: string) => {
-                    return runBrittany(document, range, tmpobj.name, tmpobj);
+                return new Promise((resolve, reject) => {
+                    fs.write(tmpobj.fd, substring, (err: NodeJS.ErrnoException, written: number, str: string) => {
+                        if (err) {
+                            return reject(err);
+                        } else {
+                            return resolve(runBrittany(document, range, tmpobj.name, tmpobj));
+                        }
+                    });
                 });
             }
 
@@ -49,7 +56,7 @@ export function activate(context: vscode.ExtensionContext) {
     }));
 }
 
-function runBrittany(document: vscode.TextDocument, range: vscode.Range, inputFilename: String, tmpobj): Thenable<vscode.TextEdit[]> {
+function runBrittany(document: vscode.TextDocument, range: vscode.Range, inputFilename: string, tmpobj): Thenable<vscode.TextEdit[]> {
     return new Promise((resolve, reject) => {
 
         const file = document.uri.fsPath;
