@@ -35,8 +35,8 @@ export function activate(context: vscode.ExtensionContext) {
             if (range.isEqual(fullDocumentRange(document))) {
                 return runBrittany(document, range, document.uri.fsPath, null);
             } else {
-                let substring = document.getText(range);
-                let tmpobj = tmp.fileSync();
+                const substring = document.getText(range);
+                const tmpobj = tmp.fileSync();
                 console.log('brittany: Temporary file: ', tmpobj.name);
                 return new Promise((resolve, reject) => {
                     fs.write(tmpobj.fd, substring, (err: NodeJS.ErrnoException, written: number, str: string) => {
@@ -60,13 +60,13 @@ function runBrittany(document: vscode.TextDocument, range: vscode.Range, inputFi
 
         const file = document.uri.fsPath;
 
-        let cmd = brittanyCmd() + " \"" + inputFilename + "\""; + " " + additionalFlags()
-        let maybeWorkspaceFolder = vscode.workspace.getWorkspaceFolder(document.uri);
-        let dir = maybeWorkspaceFolder !== undefined ? maybeWorkspaceFolder.uri.fsPath : path.dirname(document.uri.fsPath)
+        const cmd = brittanyCmd() + " \"" + inputFilename + "\""; + " " + additionalFlags()
+        const maybeWorkspaceFolder = vscode.workspace.getWorkspaceFolder(document.uri);
+        const dir = maybeWorkspaceFolder !== undefined ? maybeWorkspaceFolder.uri.fsPath : path.dirname(document.uri.fsPath)
         console.log("brittany command is: " + cmd);
         console.log("brittany folder is: " + dir)
 
-        let options = {
+        const options = {
             encoding: 'utf8',
             // timeout: 0,
             // maxBuffer: 200 * 1024, // ?
