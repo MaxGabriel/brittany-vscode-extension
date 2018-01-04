@@ -60,13 +60,13 @@ function runBrittany(document: vscode.TextDocument, range: vscode.Range, inputFi
 
         const file = document.uri.fsPath;
 
-        var cmd = brittanyCmd() + " \"" + inputFilename + "\""; + " " + additionalFlags()
-        var maybeWorkspaceFolder = vscode.workspace.getWorkspaceFolder(document.uri);
-        var dir = maybeWorkspaceFolder !== undefined ? maybeWorkspaceFolder.uri.fsPath : path.dirname(document.uri.fsPath)
+        let cmd = brittanyCmd() + " \"" + inputFilename + "\""; + " " + additionalFlags()
+        let maybeWorkspaceFolder = vscode.workspace.getWorkspaceFolder(document.uri);
+        let dir = maybeWorkspaceFolder !== undefined ? maybeWorkspaceFolder.uri.fsPath : path.dirname(document.uri.fsPath)
         console.log("brittany command is: " + cmd);
         console.log("brittany folder is: " + dir)
 
-        var options = {
+        let options = {
             encoding: 'utf8',
             // timeout: 0,
             // maxBuffer: 200 * 1024, // ?
