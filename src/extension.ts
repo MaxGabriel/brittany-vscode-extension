@@ -33,7 +33,6 @@ export function activate(context: vscode.ExtensionContext) {
             // Improvement TODO: Instead of making a tmp file, pass the source code into STDIN.
             // Could also potentially unify this approach with the full-file approach.
             if (range.isEqual(fullDocumentRange(document))) {
-
                 if (document.isDirty) {
                     vscode.commands.executeCommand('workbench.action.files.saveWithoutFormatting').then(() =>
                         vscode.commands.executeCommand('editor.action.formatDocument').then(
@@ -41,8 +40,6 @@ export function activate(context: vscode.ExtensionContext) {
                 } else {
                     return runBrittany(document, range, document.uri.fsPath, null);
                 }
-
-
             } else {
                 const substring = document.getText(range);
                 const tmpobj = tmp.fileSync();
