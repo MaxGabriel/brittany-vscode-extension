@@ -33,7 +33,13 @@ export function activate(context: vscode.ExtensionContext) {
             // Improvement TODO: Instead of making a tmp file, pass the source code into STDIN.
             // Could also potentially unify this approach with the full-file approach.
             if (range.isEqual(fullDocumentRange(document))) {
-                return runBrittany(document, range, document.uri.fsPath, null);
+                if (document.isDirty) {
+                    vscode.commands.executeCommand('workbench.action.files.saveWithoutFormatting').then(() =>
+                        vscode.commands.executeCommand('editor.action.formatDocument').then(
+                            document.save));
+                } else {
+                    return runBrittany(document, range, document.uri.fsPath, null);
+                }
             } else {
                 const substring = document.getText(range);
                 const tmpobj = tmp.fileSync();
@@ -60,11 +66,11 @@ function runBrittany(document: vscode.TextDocument, range: vscode.Range, inputFi
 
         const file = document.uri.fsPath;
 
-        const cmd = brittanyCmd() + " \"" + inputFilename + "\""; + " " + additionalFlags()
+        const cmd = brittanyCmd() + " \"" + inputFilename + "\"" + " " + additionalFlags();
         const maybeWorkspaceFolder = vscode.workspace.getWorkspaceFolder(document.uri);
-        const dir = maybeWorkspaceFolder !== undefined ? maybeWorkspaceFolder.uri.fsPath : path.dirname(document.uri.fsPath)
+        const dir = maybeWorkspaceFolder !== undefined ? maybeWorkspaceFolder.uri.fsPath : path.dirname(document.uri.fsPath);
         console.log("brittany command is: " + cmd);
-        console.log("brittany folder is: " + dir)
+        console.log("brittany folder is: " + dir);
 
         const options = {
             encoding: 'utf8',
@@ -92,7 +98,7 @@ function runBrittany(document: vscode.TextDocument, range: vscode.Range, inputFi
                     return reject([]);
                 } else {
                     if (tmpobj) { tmpobj.removeCallback(); }
-                    return resolve([vscode.TextEdit.replace(range,stdout)]);
+                    return resolve([vscode.TextEdit.replace(range, stdout)]);
                 }
             }
         );
@@ -104,15 +110,15 @@ export function deactivate() {
 }
 
 function brittanyCmd() {
-	return vscode.workspace.getConfiguration("brittany")["path"];
+    return vscode.workspace.getConfiguration("brittany")["path"];
 }
 
 function additionalFlags() {
-	return vscode.workspace.getConfiguration("brittany")["additional-flags"];
+    return vscode.workspace.getConfiguration("brittany")["additional-flags"];
 }
 
 function isEnabled() {
-	return vscode.workspace.getConfiguration("brittany")["enable"];
+    return vscode.workspace.getConfiguration("brittany")["enable"];
 }
 
 function fullDocumentRange(document: vscode.TextDocument): vscode.Range {
