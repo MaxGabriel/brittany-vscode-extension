@@ -30,6 +30,11 @@
                     "default": true,
                     "description": "Whether the extension should be enabled."
                 },
+                "brittany.stack-enable": {
+                    "type": "boolean",
+                    "default": false,
+                    "description": "Whether the extension should use brittany through stack (stack exec brittany) instead of brittany on the PATH."
+                },
                 "brittany.additional-flags": {
                     "type": "string",
                     "default": "",
