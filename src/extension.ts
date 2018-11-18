@@ -64,9 +64,13 @@ export function activate(context: vscode.ExtensionContext) {
 function runBrittany(document: vscode.TextDocument, range: vscode.Range, inputFilename: string, tmpobj): Thenable<vscode.TextEdit[]> {
     return new Promise((resolve, reject) => {
 
-        const file = document.uri.fsPath;
+        let cmd;
+        if (isStackEnabled()) {
+            cmd = "stack exec brittany" + " \"" + inputFilename + "\"" + " -- " + additionalFlags();
+        } else {
+            cmd = brittanyCmd() + " \"" + inputFilename + "\"" + " " + additionalFlags();
+        }
 
-        const cmd = brittanyCmd() + " \"" + inputFilename + "\"" + " " + additionalFlags();
         const maybeWorkspaceFolder = vscode.workspace.getWorkspaceFolder(document.uri);
         const dir = maybeWorkspaceFolder !== undefined ? maybeWorkspaceFolder.uri.fsPath : path.dirname(document.uri.fsPath);
         console.log("brittany command is: " + cmd);
@@ -120,6 +124,11 @@ function additionalFlags() {
 function isEnabled() {
     return vscode.workspace.getConfiguration("brittany")["enable"];
 }
+
+function isStackEnabled() {
+    return vscode.workspace.getConfiguration("brittany")["stack-enable"];
+}
+
 
 function fullDocumentRange(document: vscode.TextDocument): vscode.Range {
     const lastLineId = document.lineCount - 1;
