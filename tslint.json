@@ -1,0 +1,19 @@
+{
+    "defaultSeverity": "error",
+    "extends": "tslint:recommended",
+    "rules": {
+        "no-console": false,
+        "trailing-comma": false,
+        "comment-format": [
+            true,
+            "check-space",
+            "check-lowercase"
+        ],
+        "typedef": [true,
+            "call-signature",
+            "parameter",
+            "member-variable-declaration",
+            "variable-declaration"
+        ]
+    }
+}

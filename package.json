@@ -30,12 +30,12 @@
                     "default": true,
                     "description": "Whether the extension should be enabled."
                 },
-                "brittany.stack-enable": {
+                "brittany.stackEnable": {
                     "type": "boolean",
                     "default": false,
                     "description": "Whether the extension should use brittany through stack (stack exec brittany) instead of brittany on the PATH."
                 },
-                "brittany.additional-flags": {
+                "brittany.additionalFlags": {
                     "type": "string",
                     "default": "",
                     "description": "Additional flags to pass to brittany, e.g. --indent AMOUNT. These are unescaped. They should not attempt to change the input or output files. This option mostly exists as an escape hatch—you should generally prefer editing your brittany config file if possible."
@@ -56,7 +56,8 @@
     "devDependencies": {
         "@types/mocha": "^2.2.42",
         "@types/node": "^7.0.43",
-        "typescript": "^2.6.1",
+        "@types/tmp": "0.0.33",
+        "typescript": "^3.1.6",
         "vscode": "^1.1.21"
     }
 }
