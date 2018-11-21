@@ -24,6 +24,22 @@ export function activate(context: vscode.ExtensionContext): void {
                     return reject([]);
                 });
             }
+
+            // if document has CRLF line endings, change it to LF for the duration of the format.
+            if (document.eol === vscode.EndOfLine.CRLF) {
+                console.log("temporarily changing line endings to LF");
+                const LF: vscode.WorkspaceEdit = new vscode.WorkspaceEdit();
+                const CRLF: vscode.WorkspaceEdit = new vscode.WorkspaceEdit();
+                LF.set(document.uri, [vscode.TextEdit.setEndOfLine(vscode.EndOfLine.LF)]);
+                CRLF.set(document.uri, [vscode.TextEdit.setEndOfLine(vscode.EndOfLine.CRLF)]);
+                vscode.workspace.applyEdit(LF)
+                    .then(() => vscode.commands.executeCommand("workbench.action.files.saveWithoutFormatting"))
+                    .then(() => vscode.commands.executeCommand("editor.action.formatDocument"))
+                    .then(() => vscode.workspace.applyEdit(CRLF))
+                    .then(() => vscode.commands.executeCommand("workbench.action.files.saveWithoutFormatting"));
+                return;
+            }
+
             console.log("brittany asked to format");
 
             // if we're formatting the whole document
@@ -32,9 +48,9 @@ export function activate(context: vscode.ExtensionContext): void {
             // could also potentially unify this approach with the full-file approach.
             if (range.isEqual(fullDocumentRange(document))) {
                 if (document.isDirty) {
-                    vscode.commands.executeCommand("workbench.action.files.saveWithoutFormatting").then(() =>
-                        vscode.commands.executeCommand("editor.action.formatDocument").then(() =>
-                            vscode.commands.executeCommand("workbench.action.files.saveWithoutFormatting")));
+                    vscode.commands.executeCommand("workbench.action.files.saveWithoutFormatting")
+                        .then(() => vscode.commands.executeCommand("editor.action.formatDocument"))
+                        .then(() => vscode.commands.executeCommand("workbench.action.files.saveWithoutFormatting"));
                 } else {
                     return runBrittany(document, range, document.uri.fsPath, null);
                 }
