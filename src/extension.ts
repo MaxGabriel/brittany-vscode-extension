@@ -26,6 +26,15 @@ export function activate(context: vscode.ExtensionContext): void {
             }
             console.log("brittany asked to format");
 
+            // if document has CRLF line endings, change it to LF.
+            if (!keepCRLF() && document.eol === vscode.EndOfLine.CRLF) {
+                console.log("changing line endings to LF");
+                const LF: vscode.WorkspaceEdit = new vscode.WorkspaceEdit();
+                LF.set(document.uri, [vscode.TextEdit.setEndOfLine(vscode.EndOfLine.LF)]);
+                vscode.workspace.applyEdit(LF)
+                        .then(() => vscode.commands.executeCommand("workbench.action.files.saveWithoutFormatting"));
+            }
+
             // if we're formatting the whole document
             // brittany operates on files only, so we need to
             // improvement TODO: Instead of making a tmp file, pass the source code into STDIN.
@@ -112,6 +121,10 @@ function isEnabled(): boolean {
 
 function isStackEnabled(): boolean {
     return vscode.workspace.getConfiguration("brittany").stackEnable;
+}
+
+function keepCRLF(): boolean {
+    return vscode.workspace.getConfiguration("brittany").keepCRLF;
 }
 
 function fullDocumentRange(document: vscode.TextDocument): vscode.Range {
