@@ -61,7 +61,7 @@ function runBrittany(document: vscode.TextDocument, range: vscode.Range,
     return new Promise((resolve, reject) => {
 
         const cmd: string = isStackEnabled()
-            ? `stack exec brittany \"${inputFilename}\" --  ${additionalFlags}`
+            ? `stack exec brittany \"${inputFilename}\" --  ${additionalFlags()}`
             : `${brittanyCmd()} \"${inputFilename}\" ${additionalFlags()}`;
         const maybeWorkspaceFolder: vscode.WorkspaceFolder = vscode.workspace.getWorkspaceFolder(document.uri);
         const dir: string = maybeWorkspaceFolder !== undefined
