@@ -30,6 +30,7 @@ I'm not familiar with `brittany`'s support for literate Haskell (.lhs) or Haskel
 * `brittany.enable`: A boolean value to enable or disable the extension. Default: `true`.
 * `brittany.additionalFlags`: Additional flags to pass to brittany, e.g. --indent AMOUNT. These are unescaped. They should not attempt to change the input or output files. This option mostly exists as an escape hatch—you should generally prefer editing your brittany config file if possible.
 * `brittany.stackEnable`: A boolean value to enable or disable brittany through stack (stack exec brittany). Default: `false`.
+* `brittany.keepCRLF`: A boolean value for whether the extension should keep CRLF endings rather than replace them with LF. Default: `false`.
 
 ## brittany Configuration
 
