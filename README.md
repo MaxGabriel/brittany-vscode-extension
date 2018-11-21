@@ -28,7 +28,8 @@ I'm not familiar with `brittany`'s support for literate Haskell (.lhs) or Haskel
 
 * `brittany.path`: Path to the brittany executable. This will be wrapped in double quotes to escape it, so your path can e.g. include spaces. Default: `brittany` (so if `brittany` is on your $PATH, it should work without any configuration).
 * `brittany.enable`: A boolean value to enable or disable the extension. Default: `true`.
-* `brittany.additional-flags`: Additional flags to pass to brittany, e.g. --indent AMOUNT. These are unescaped. They should not attempt to change the input or output files. This option mostly exists as an escape hatch—you should generally prefer editing your brittany config file if possible.
+* `brittany.additionalFlags`: Additional flags to pass to brittany, e.g. --indent AMOUNT. These are unescaped. They should not attempt to change the input or output files. This option mostly exists as an escape hatch—you should generally prefer editing your brittany config file if possible.
+* `brittany.stackEnable`: A boolean value to enable or disable brittany through stack (stack exec brittany). Default: `false`.
 
 ## brittany Configuration
 
@@ -38,8 +39,8 @@ I'm not familiar with `brittany`'s support for literate Haskell (.lhs) or Haskel
 
 * While `brittany` can sometimes format partial selections of code, this functionality is limited based on what it can parse. For example, in this code:
     ```
-    where fib n = fib (n-3)
+    where fib n = fib (n-1) + fib (n-2)
     ```
-    The selection `fib n = fib (n-3)` can be formatted by `brittany`, but the whole line `where fib n = fib (n-3)` cannot be.
+    The selection `fib n = fib (n-1) + fib (n-2)` can be formatted by `brittany`, but the whole line `where fib n = fib (n-1) + fib (n-2)` cannot be.
 
 * This is my first VSCode extension, and I'm not an experienced Node/Typescript developer. If you spot a bug or can make an improvement, issues and PRs are welcome.
