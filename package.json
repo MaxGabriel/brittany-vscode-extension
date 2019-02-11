@@ -12,7 +12,7 @@
         "Formatters"
     ],
     "activationEvents": [
-        "*"
+        "onLanguage:haskell"
     ],
     "main": "./out/extension",
     "contributes": {
