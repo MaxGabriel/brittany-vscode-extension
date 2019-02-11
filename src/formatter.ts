@@ -19,6 +19,12 @@ import {
   WorkspaceFolder
 } from "vscode";
 
+declare module "util" {
+  export function promisify<T>(
+    func: (data: any, cb: (err: NodeJS.ErrnoException, data?: T) => void,
+  ) => void): (...input: any[]) => Promise<T>;
+}
+
 export default class Formatter
   implements
     Disposable,
@@ -152,7 +158,7 @@ export default class Formatter
     console.log("brittany folder is: " + dir);
 
     try {
-      const { stdout, stderr } = await util.promisify(proc.execFile)(
+      const { stdout }: any = await util.promisify(proc.execFile)(
         cmdName,
         args,
         options
