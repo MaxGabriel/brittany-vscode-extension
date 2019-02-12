@@ -19,9 +19,9 @@ import {
 
 export default class Formatter
   implements
-    Disposable,
-    DocumentRangeFormattingEditProvider,
-    DocumentFormattingEditProvider {
+  Disposable,
+  DocumentRangeFormattingEditProvider,
+  DocumentFormattingEditProvider {
   private disposables: Disposable[] = [];
   private keepCRLF: boolean = false;
   private isStackEnabled: boolean = false;
@@ -125,7 +125,7 @@ export default class Formatter
     }
 
     const dir: string =
-      maybeWorkspaceFolder !== null
+      (maybeWorkspaceFolder !== null && maybeWorkspaceFolder !== undefined)
         ? maybeWorkspaceFolder.uri.fsPath
         : path.dirname(inputFilename);
     const options: { cwd: string; encoding: string; stdin?: string } = {
@@ -154,7 +154,7 @@ export default class Formatter
         console.error(error);
         window.showErrorMessage(
           "Failed to run brittany; see the developer tools console for details. " +
-            error
+          error
         );
         throw new Error(
           "Failed to run brittany; see the developer tools console for details."
