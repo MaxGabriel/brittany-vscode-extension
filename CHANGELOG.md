@@ -8,3 +8,7 @@
 ## 0.0.3
 - By default, files with CRLF line endings (Windows standard) will be replaced with LF to avoid upstream issues with the Brittany executable inserting extra newlines.
 - Adds a configuration option, `keepCRLF` to keep CRLF line endings instead of replacing them with LF [#12](https://github.com/MaxGabriel/brittany-vscode-extension/pull/12) by @mnxn
+
+## 0.0.4
+- Update to latest VSCode formatting API
+- No longer create temporary files 
