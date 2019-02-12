@@ -162,7 +162,7 @@ export default class Formatter
       console.log(`Result: ${stdout}`);
       const err: string = String(stderr);
       if (err.length > 0) {
-        console.error(`Error: ${err}`);
+        throw new Error(err);
       }
 
       return String(stdout);
