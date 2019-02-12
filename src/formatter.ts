@@ -1,7 +1,5 @@
-import * as proc from "child_process";
 import * as path from "path";
-import * as tmp from "tmp";
-import * as util from "util";
+import * as child_proc from "promisify-child-process";
 import {
   CancellationToken,
   commands,
@@ -18,12 +16,6 @@ import {
   WorkspaceEdit,
   WorkspaceFolder
 } from "vscode";
-
-declare module "util" {
-  export function promisify<T>(
-    func: (data: any, cb: (err: NodeJS.ErrnoException, data?: T) => void,
-  ) => void): (...input: any[]) => Promise<T>;
-}
 
 export default class Formatter
   implements
@@ -61,7 +53,7 @@ export default class Formatter
     options: FormattingOptions,
     token: CancellationToken
   ): Promise<TextEdit[]> {
-    console.log(`Formatting`);
+    console.log(`Formatting entire doc!`);
     return await this.provideDocumentRangeFormattingEdits(
       document,
       null,
@@ -77,7 +69,7 @@ export default class Formatter
     token: CancellationToken
   ): Promise<TextEdit[]> {
     console.log(
-      `Formatting with brittany: ${JSON.stringify({
+      `Formatting (partially) with brittany: ${JSON.stringify({
         document,
         options,
         range,
@@ -110,6 +102,7 @@ export default class Formatter
 
     const formatted: string = await this.runBrittany(input, document.fileName);
     edits.push(TextEdit.replace(range || fullRange, formatted));
+    console.log(`Edits: ${JSON.stringify(edits)}`);
     return edits;
   }
 
@@ -145,24 +138,32 @@ export default class Formatter
     }
 
     const dir: string =
-      maybeWorkspaceFolder !== undefined
+      maybeWorkspaceFolder !== null
         ? maybeWorkspaceFolder.uri.fsPath
-        : workspace.rootPath;
+        : path.dirname(inputFilename);
     const options: { cwd: string; encoding: string; stdin?: string } = {
       cwd: dir,
-      encoding: "utf8",
-      stdin
+      encoding: "utf8"
     };
 
     console.log("brittany command is: " + cmdName);
     console.log("brittany folder is: " + dir);
 
     try {
-      const { stdout }: any = await util.promisify(proc.execFile)(
-        cmdName,
-        args,
-        options
-      );
+      console.log(`Invoking with: ${JSON.stringify([cmdName, args, options])}`);
+      const child: any = child_proc.execFile(cmdName, args, options);
+      if (stdin && stdin.length > 0) {
+        child.stdin.write(stdin);
+      }
+      if (child.stdin) {
+        child.stdin.end();
+      }
+      const { stdout, stderr }: any = await child;
+      console.log(`Result: ${stdout}`);
+      const err: string = String(stderr);
+      if (err.length > 0) {
+        console.error(`Error: ${err}`);
+      }
 
       return String(stdout);
     } catch (error) {

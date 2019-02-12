@@ -1,67 +1,67 @@
 {
-    "name": "brittany",
-    "displayName": "brittany",
-    "description": "Runs the Haskell code formatting tool Brittany",
-    "version": "0.0.3",
-    "publisher": "MaxGabriel",
-    "repository": "https://github.com/MaxGabriel/brittany-vscode-extension",
-    "engines": {
-        "vscode": "^1.19.0"
-    },
-    "categories": [
-        "Formatters"
-    ],
-    "activationEvents": [
-        "onLanguage:haskell"
-    ],
-    "main": "./out/extension",
-    "contributes": {
-        "configuration": {
-            "title": "brittany configuration",
-            "type": "object",
-            "properties": {
-                "brittany.path": {
-                    "type": "string",
-                    "default": "brittany",
-                    "description": "Path to the brittany executable. This will be wrapped in double quotes to escape it, so your path can e.g. include spaces."
-                },
-                "brittany.enable": {
-                    "type": "boolean",
-                    "default": true,
-                    "description": "Whether the extension should be enabled."
-                },
-                "brittany.stackEnable": {
-                    "type": "boolean",
-                    "default": false,
-                    "description": "Whether the extension should use brittany through stack (stack exec brittany) instead of brittany on the PATH."
-                },
-                "brittany.additionalFlags": {
-                    "type": "string",
-                    "default": "",
-                    "description": "Additional flags to pass to brittany, e.g. --indent AMOUNT. These are unescaped. They should not attempt to change the input or output files. This option mostly exists as an escape hatch—you should generally prefer editing your brittany config file if possible."
-                },
-                "brittany.keepCRLF": {
-                    "type": "boolean",
-                    "default": false,
-                    "description": "Whether the extension should replace CRLF endings with LF. Upstream issues with brittany will introduce unneccessary new lines if this is on."
-                }
-            }
+  "name": "brittany",
+  "displayName": "brittany",
+  "description": "Runs the Haskell code formatting tool Brittany",
+  "version": "0.0.3",
+  "publisher": "MaxGabriel",
+  "repository": "https://github.com/MaxGabriel/brittany-vscode-extension",
+  "engines": {
+    "vscode": "^1.19.0"
+  },
+  "categories": [
+    "Formatters"
+  ],
+  "activationEvents": [
+    "onLanguage:haskell"
+  ],
+  "main": "./out/extension",
+  "contributes": {
+    "configuration": {
+      "title": "brittany configuration",
+      "type": "object",
+      "properties": {
+        "brittany.path": {
+          "type": "string",
+          "default": "brittany",
+          "description": "Path to the brittany executable. This will be wrapped in double quotes to escape it, so your path can e.g. include spaces."
+        },
+        "brittany.enable": {
+          "type": "boolean",
+          "default": true,
+          "description": "Whether the extension should be enabled."
+        },
+        "brittany.stackEnable": {
+          "type": "boolean",
+          "default": false,
+          "description": "Whether the extension should use brittany through stack (stack exec brittany) instead of brittany on the PATH."
+        },
+        "brittany.additionalFlags": {
+          "type": "string",
+          "default": "",
+          "description": "Additional flags to pass to brittany, e.g. --indent AMOUNT. These are unescaped. They should not attempt to change the input or output files. This option mostly exists as an escape hatch—you should generally prefer editing your brittany config file if possible."
+        },
+        "brittany.keepCRLF": {
+          "type": "boolean",
+          "default": false,
+          "description": "Whether the extension should replace CRLF endings with LF. Upstream issues with brittany will introduce unneccessary new lines if this is on."
         }
-    },
-    "scripts": {
-        "vscode:prepublish": "npm run compile",
-        "compile": "tsc -p ./",
-        "watch": "tsc -watch -p ./",
-        "postinstall": "node ./node_modules/vscode/bin/install"
-    },
-    "dependencies": {
-        "tmp": "^0.0.33"
-    },
-    "devDependencies": {
-        "@types/mocha": "^2.2.42",
-        "@types/node": "^7.0.43",
-        "@types/tmp": "0.0.33",
-        "typescript": "^3.1.6",
-        "vscode": "^1.1.21"
+      }
     }
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run compile",
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./",
+    "postinstall": "node ./node_modules/vscode/bin/install"
+  },
+  "dependencies": {
+    "promisify-child-process": "*"
+  },
+  "devDependencies": {
+    "@types/mocha": "^2.2.42",
+    "@types/node": "^7.0.43",
+    "@types/tmp": "0.0.33",
+    "typescript": "^3.1.6",
+    "vscode": "^1.1.21"
+  }
 }
