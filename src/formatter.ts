@@ -30,9 +30,7 @@ export default class Formatter
   private brittanyCmd: string = "brittany";
 
   constructor() {
-    console.log(`Awoken`);
     this.loadSettings();
-    console.log("Loaded Brittanies");
     workspace.onDidChangeConfiguration(
       (evt) => {
         if (evt.affectsConfiguration("brittany")) {
@@ -53,7 +51,6 @@ export default class Formatter
     options: FormattingOptions,
     token: CancellationToken
   ): Promise<TextEdit[]> {
-    console.log(`Formatting entire doc!`);
     return await this.provideDocumentRangeFormattingEdits(
       document,
       null,
@@ -68,21 +65,12 @@ export default class Formatter
     options: FormattingOptions,
     token: CancellationToken
   ): Promise<TextEdit[]> {
-    console.log(
-      `Formatting (partially) with brittany: ${JSON.stringify({
-        document,
-        options,
-        range,
-        token
-      })}`
-    );
     const edits: TextEdit[] = [];
     if (!this.isEnabled) {
       throw new Error("Brittany formatter not enabled");
     }
     // if document has CRLF line endings, change it to LF.
     if (!this.keepCRLF && document.eol === EndOfLine.CRLF) {
-      console.log("changing line endings to LF");
       edits.push(TextEdit.setEndOfLine(EndOfLine.LF));
     }
 
@@ -102,7 +90,6 @@ export default class Formatter
 
     const formatted: string = await this.runBrittany(input, document.fileName);
     edits.push(TextEdit.replace(range || fullRange, formatted));
-    console.log(`Edits: ${JSON.stringify(edits)}`);
     return edits;
   }
 
@@ -146,11 +133,7 @@ export default class Formatter
       encoding: "utf8"
     };
 
-    console.log("brittany command is: " + cmdName);
-    console.log("brittany folder is: " + dir);
-
     try {
-      console.log(`Invoking with: ${JSON.stringify([cmdName, args, options])}`);
       const child: any = child_proc.execFile(cmdName, args, options);
       if (stdin && stdin.length > 0) {
         child.stdin.write(stdin);
@@ -159,7 +142,6 @@ export default class Formatter
         child.stdin.end();
       }
       const { stdout, stderr }: any = await child;
-      console.log(`Result: ${stdout}`);
       const err: string = String(stderr);
       if (err.length > 0) {
         throw new Error(err);
