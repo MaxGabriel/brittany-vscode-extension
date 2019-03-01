@@ -115,6 +115,7 @@ export default class Formatter
       cmdName = "stack";
       args.push("exec", "brittany", "--");
     }
+    args.push(...this.additionalFlags.split(" "));
     if (typeof input === "string") {
       stdin = input;
       args.push("--write-mode", "display");

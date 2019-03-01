@@ -12,3 +12,6 @@
 ## 0.0.4
 - Update to latest VSCode formatting API
 - No longer create temporary files 
+
+## 0.0.5
+- Get `additionalFlags` working again 
