@@ -106,7 +106,7 @@ export default class Formatter
     input: string | TextDocument,
     inputFilename: string
   ): Promise<string> {
-    let cmdName: string = "brittany";
+    let cmdName: string = this.brittanyCmd;
     const args: string[] = [];
     let stdin: string | undefined;
     let maybeWorkspaceFolder: WorkspaceFolder = null;
@@ -115,7 +115,9 @@ export default class Formatter
       cmdName = "stack";
       args.push("exec", "brittany", "--");
     }
-    args.push(...this.additionalFlags.split(" "));
+    if (this.additionalFlags.length > 0) {
+      args.push(...this.additionalFlags.split(" "));
+    }
     if (typeof input === "string") {
       stdin = input;
       args.push("--write-mode", "display");

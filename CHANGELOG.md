@@ -15,3 +15,7 @@
 
 ## 0.0.5
 - Get `additionalFlags` working again 
+
+## 0.0.6
+- Fix error when `additionalFlags` is empty
+- Use `brittanyCmd` when stack is not enabled
