@@ -19,3 +19,7 @@
 ## 0.0.6
 - Fix error when `additionalFlags` is empty
 - Use `brittanyCmd` when stack is not enabled
+
+## 0.0.7
+- Write errors to output instead of developer console
+- Add `showErrorNotification` option to to configure whether to show a vscode error notification when brittany fails. 

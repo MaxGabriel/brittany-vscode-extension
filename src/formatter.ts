@@ -2,7 +2,6 @@ import * as path from "path";
 import * as child_proc from "promisify-child-process";
 import {
   CancellationToken,
-  commands,
   Disposable,
   DocumentFormattingEditProvider,
   DocumentRangeFormattingEditProvider,
@@ -13,8 +12,8 @@ import {
   TextEdit,
   window,
   workspace,
-  WorkspaceEdit,
-  WorkspaceFolder
+  WorkspaceFolder,
+  OutputChannel
 } from "vscode";
 
 export default class Formatter
@@ -28,9 +27,13 @@ export default class Formatter
   private isEnabled: boolean = true;
   private additionalFlags: string = "";
   private brittanyCmd: string = "brittany";
+  private showErrorNotification: boolean = false;
+
+  private outputChannel: OutputChannel = window.createOutputChannel("Brittany");
 
   constructor() {
     this.loadSettings();
+    this.disposables.push(this.outputChannel);
     workspace.onDidChangeConfiguration(
       (evt) => {
         if (evt.affectsConfiguration("brittany")) {
@@ -100,6 +103,7 @@ export default class Formatter
     this.isEnabled = config.enable;
     this.additionalFlags = config.additionalFlags;
     this.brittanyCmd = config.path;
+    this.showErrorNotification = config.showErrorNotification;
   }
 
   private async runBrittany(
@@ -137,14 +141,14 @@ export default class Formatter
     };
 
     try {
-      const child: any = child_proc.execFile(cmdName, args, options);
+      const child: child_proc.ChildProcessPromise = child_proc.execFile(cmdName, args, options);
       if (stdin && stdin.length > 0) {
         child.stdin.write(stdin);
       }
       if (child.stdin) {
         child.stdin.end();
       }
-      const { stdout, stderr }: any = await child;
+      const { stdout, stderr } = await child;
       const err: string = String(stderr);
       if (err.length > 0) {
         throw new Error(err);
@@ -152,17 +156,11 @@ export default class Formatter
 
       return String(stdout);
     } catch (error) {
-      {
-        console.error("Error running brittany:");
-        console.error(error);
-        window.showErrorMessage(
-          "Failed to run brittany; see the developer tools console for details. " +
-          error
-        );
-        throw new Error(
-          "Failed to run brittany; see the developer tools console for details."
-        );
+      this.outputChannel.appendLine(error);
+      if (this.showErrorNotification) {
+        window.showErrorMessage("Failed to run brittany; see output for details. " + error);
       }
+      throw new Error("Failed to run brittany; see output for details.");
     }
   }
 

@@ -2,7 +2,7 @@
   "name": "brittany",
   "displayName": "brittany",
   "description": "Runs the Haskell code formatting tool Brittany",
-  "version": "0.0.6",
+  "version": "0.0.7",
   "publisher": "MaxGabriel",
   "repository": "https://github.com/MaxGabriel/brittany-vscode-extension",
   "engines": {
@@ -43,7 +43,12 @@
         "brittany.keepCRLF": {
           "type": "boolean",
           "default": false,
-          "description": "Whether the extension should replace CRLF endings with LF. Upstream issues with brittany will introduce unneccessary new lines if this is on."
+          "description": "Whether the extension should replace CRLF endings with LF."
+        },
+        "brittany.showErrorNotification": {
+          "type": "boolean",
+          "default": false,
+          "description": "Whether the extension should show an error message when running brittany fails."
         }
       }
     }
