@@ -2,7 +2,7 @@
   "name": "brittany",
   "displayName": "brittany",
   "description": "Runs the Haskell code formatting tool Brittany",
-  "version": "0.0.7",
+  "version": "0.0.8",
   "publisher": "MaxGabriel",
   "repository": "https://github.com/MaxGabriel/brittany-vscode-extension",
   "engines": {

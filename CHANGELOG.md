@@ -22,4 +22,7 @@
 
 ## 0.0.7
 - Write errors to output instead of developer console
-- Add `showErrorNotification` option to to configure whether to show a vscode error notification when brittany fails. 
+- Add `showErrorNotification` option to to configure whether to show a vscode error notification when brittany fails.
+
+## 0.0.8
+- Always use workspace as working directory for command, if available

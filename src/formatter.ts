@@ -125,6 +125,9 @@ export default class Formatter
     if (typeof input === "string") {
       stdin = input;
       args.push("--write-mode", "display");
+      if (workspace.name !== undefined) {
+        maybeWorkspaceFolder = workspace.workspaceFolders[0];
+      }
     } else {
       args.push(input.uri.fsPath);
       args.push("--write-mode", "display");
