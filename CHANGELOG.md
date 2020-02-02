@@ -26,3 +26,6 @@
 
 ## 0.0.8
 - Always use workspace as working directory for command, if available
+
+## 0.0.9
+- Suppress stack warnings
