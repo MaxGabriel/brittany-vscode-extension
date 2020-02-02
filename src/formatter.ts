@@ -117,7 +117,7 @@ export default class Formatter
 
     if (this.isStackEnabled) {
       cmdName = "stack";
-      args.push("exec", "brittany", "--");
+      args.push("--verbosity", "error", "exec", "brittany", "--");
     }
     if (this.additionalFlags.length > 0) {
       args.push(...this.additionalFlags.split(" "));
